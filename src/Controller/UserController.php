@@ -3,24 +3,23 @@
 namespace App\Controller;
 
 use App\DTO\UserCreateDTO;
+use App\HTTPResource\Auth\AuthResource;
+use App\HTTPResource\User\UserResource;
 use App\Request\RegistrationRequest;
 use App\Service\UserService;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends BaseController
 {
     #[Route('/users', name: 'create_user', methods: ['POST'])]
-    public function store(UserService $userService, RegistrationRequest $request, SerializerInterface $serializer): JsonResponse
+    public function store(UserService $userService, RegistrationRequest $request, JWTTokenManagerInterface $jwtManager): JsonResponse
     {
         $data = $request->getRequest()->toArray();
 
-        $user = $userService->createUser(new UserCreateDTO($data['name'], $data['email'], $data['password']));
+        $user = $userService->createUser(new UserCreateDTO($data['name'], $data['password']), $jwtManager);
 
-        return $this->successResponse(json_decode($serializer->serialize($user, 'json', [
-            AbstractNormalizer::GROUPS => ['user_details']
-        ])));
+        return $this->successResponse(new AuthResource($user));
     }
 }
