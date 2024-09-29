@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\DTO\UserCreateDTO;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,5 +26,14 @@ class UserRepository extends ServiceEntityRepository
         $this->entityManager->flush();
 
         return $user;
+    }
+
+    public function getUser(string $name): ?User
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->where('u.name = :name')
+            ->setParameter('name', $name);
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

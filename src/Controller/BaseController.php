@@ -18,7 +18,7 @@ abstract class BaseController extends AbstractController
             'status' => $code,
             'message' => $message,
             'data' => $data
-        ]);
+        ], $code);
     }
 
     public function errorResponse(string $message = '', array $errors = [], int $code = 500): JsonResponse
@@ -27,6 +27,6 @@ abstract class BaseController extends AbstractController
             'status' => $code,
             'message' => $message,
             'error' => $errors
-        ]);
+        ], $code);
     }
 }
