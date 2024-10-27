@@ -13,7 +13,18 @@ abstract class HTTPResource
         }
     }
 
+    abstract public function expectedClass(): string;
+
     abstract public function toArray(): array;
 
-    abstract public function expectedClass(): string;
+    public static function collection(array $data): array
+    {
+        $result = [];
+
+        foreach ($data as $item) {
+            $result[] = (new static($item))->toArray();
+        }
+
+        return $result;
+    }
 }
