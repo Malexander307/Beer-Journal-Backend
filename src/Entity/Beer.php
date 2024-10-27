@@ -18,6 +18,9 @@ class Beer
     #[ORM\Column(length: 255)]
     private string $imageUrl;
 
+    #[ORM\Column(length: 255)]
+    private string $description;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Beer
     {
         $this->imageUrl = $imageUrl;
 
+        return $this;
+    }
+
+    // Getter and setter for description
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
         return $this;
     }
 }

@@ -18,6 +18,7 @@ class BeerResource extends HTTPResource
             'id' => $this->entity->getId(),
             'name' => $this->entity->getName(),
             'image_url' => $this->entity->getImageUrl(),
+            'description' => $this->entity->getDescription(),
         ];
     }
 
