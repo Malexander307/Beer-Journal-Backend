@@ -22,9 +22,17 @@ class BeerRepository extends ServiceEntityRepository
         return $this->findAll();
     }
 
-    public function create(Beer $beer): Beer
+    public function createOrUpdate(Beer $beer): Beer
     {
         $this->entityManager->persist($beer);
+        $this->entityManager->flush();
+
+        return $beer;
+    }
+
+    public function delete(Beer $beer): Beer
+    {
+        $this->entityManager->remove($beer);
         $this->entityManager->flush();
 
         return $beer;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\DTO\CreateBeerDTO;
+use App\DTO\UpdateBeerDTO;
 use App\Entity\Beer;
 use App\Repository\BeerRepository;
 
@@ -29,8 +30,24 @@ class BeerService
         $beer->setDescription($createBeerDTO->description);
         $beer->setImageUrl($createBeerDTO->imageUrl);
 
-        $this->repository->create($beer);
+        $this->repository->createOrUpdate($beer);
 
         return $beer;
+    }
+
+    public function update(Beer $beer, UpdateBeerDTO $updateBeerDTO): Beer
+    {
+        $beer->setName($updateBeerDTO->name);
+        $beer->setDescription($updateBeerDTO->description);
+        $beer->setImageUrl($updateBeerDTO->imageUrl);
+
+        $this->repository->createOrUpdate($beer);
+
+        return $beer;
+    }
+
+    public function delete(Beer $beer): Beer
+    {
+        return $this->repository->delete($beer);
     }
 }

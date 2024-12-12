@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\DTO\CreateBeerDTO;
+use App\DTO\UpdateBeerDTO;
+use App\Entity\Beer;
 use App\HTTPResource\Beer\BeerResource;
 use App\Repository\BeerRepository;
 use App\Request\Beer\CreateBeerRequest;
+use App\Request\Beer\UpdateBeerRequest;
 use App\Service\BeerService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,6 +46,24 @@ class BeerController extends BaseController
             $data['description'],
             $data['image_url']
         ));
+
+        return $this->successResponse(new BeerResource($beer));
+    }
+
+    #[Route('/beers/{id}', name: 'update_beer', methods: ['PUT'])]
+    public function update(Beer $beer, UpdateBeerRequest $request, BeerService $service): JsonResponse
+    {
+        $data = $request->getRequest()->toArray();
+
+        $beer = $service->update($beer, new UpdateBeerDTO($data['name'], $data['description'], $data['image_url']));
+
+        return $this->successResponse(new BeerResource($beer));
+    }
+
+    #[Route('/beers/{id}', name: 'delete_beer', methods: ['DELETE'])]
+    public function delete(Beer $beer, BeerService $service): JsonResponse
+    {
+        $beer = $service->delete($beer);
 
         return $this->successResponse(new BeerResource($beer));
     }
