@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\DTO\CreateBeerDTO;
 use App\HTTPResource\Beer\BeerResource;
 use App\Repository\BeerRepository;
+use App\Request\Beer\CreateBeerRequest;
+use App\Service\BeerService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,5 +31,19 @@ class BeerController extends BaseController
                 'total_items' => $pagination->getTotalItemCount(),
             ]
         ]);
+    }
+
+    #[Route('/beers', name: 'create_beer', methods: ['POST'])]
+    public function create(CreateBeerRequest $request, BeerService $service): JsonResponse
+    {
+        $data = $request->getRequest()->toArray();
+
+        $beer = $service->create(new CreateBeerDTO(
+            $data['name'],
+            $data['description'],
+            $data['image_url']
+        ));
+
+        return $this->successResponse(new BeerResource($beer));
     }
 }
