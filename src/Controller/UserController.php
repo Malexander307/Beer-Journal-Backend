@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\DTO\LoginDTO;
-use App\DTO\UserCreateDTO;
-use App\HTTPResource\Auth\AuthResource;
+use App\DTO\Auth\LoginDTO;
+use App\DTO\User\UserCreateDTO;
+use App\HTTPResource\MobileAPI\Auth\AuthResource;
 use App\Request\Auth\LoginRequest;
 use App\Request\Auth\RegistrationRequest;
 use App\Service\UserService;
@@ -37,4 +37,18 @@ class UserController extends BaseController
 
         return $this->successResponse(new AuthResource($authData));
     }
+
+    #[Route('/admin/login', name: 'admin_login', methods: ['POST'])]
+    public function adminLogin(UserService $userService, LoginRequest $request): JsonResponse
+    {
+        $data = $request->getRequest()->toArray();
+        try {
+            $authData = $userService->adminLogin(new LoginDTO($data['name'], $data['password']));
+        } catch (NotFoundHttpException|BadRequestHttpException $exception) {
+            return $this->errorResponse($exception->getMessage(), (array)$exception->getMessage(), $exception->getStatusCode());
+        }
+
+        return $this->successResponse(new AuthResource($authData));
+    }
 }
+

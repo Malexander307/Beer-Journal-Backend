@@ -1,6 +1,6 @@
 <?php
 
-namespace App\HTTPResource\Beer;
+namespace App\HTTPResource\MobileAPI\Beer;
 
 use App\Entity\Beer;
 use App\HTTPResource\HTTPResource;

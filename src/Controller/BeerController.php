@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\DTO\CreateBeerDTO;
-use App\DTO\UpdateBeerDTO;
+use App\DTO\Beer\CreateBeerDTO;
+use App\DTO\Beer\UpdateBeerDTO;
 use App\Entity\Beer;
-use App\HTTPResource\Beer\BeerResource;
+use App\HTTPResource\MobileAPI\Beer\BeerResource;
 use App\Repository\BeerRepository;
 use App\Request\Beer\CreateBeerRequest;
 use App\Request\Beer\UpdateBeerRequest;

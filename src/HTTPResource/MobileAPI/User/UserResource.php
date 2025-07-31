@@ -1,6 +1,6 @@
 <?php
 
-namespace App\HTTPResource\User;
+namespace App\HTTPResource\MobileAPI\User;
 
 use App\Entity\User;
 use App\HTTPResource\HTTPResource;
