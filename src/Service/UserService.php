@@ -2,9 +2,9 @@
 
 namespace App\Service;
 
-use App\DTO\AuthDTO;
-use App\DTO\LoginDTO;
-use App\DTO\UserCreateDTO;
+use App\DTO\Auth\AuthDTO;
+use App\DTO\Auth\LoginDTO;
+use App\DTO\User\UserCreateDTO;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -51,5 +51,14 @@ class UserService
             $this->jwtManager->create($user),
             $user
         );
+    }
+
+    public function adminLogin(LoginDTO $loginDTO): AuthDTO
+    {
+        $authData = $this->login($loginDTO);
+        if (!$authData->user->getIsAdmin()) {
+            throw new BadRequestHttpException('User is not admin.');
+        }
+        return $authData;
     }
 }

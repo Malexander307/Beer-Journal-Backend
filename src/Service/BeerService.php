@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\DTO\CreateBeerDTO;
-use App\DTO\UpdateBeerDTO;
+use App\DTO\Beer\CreateBeerDTO;
+use App\DTO\Beer\UpdateBeerDTO;
 use App\Entity\Beer;
 use App\Repository\BeerRepository;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\HTTPResource\Auth;
+namespace App\HTTPResource\MobileAPI\Auth;
 
-use App\DTO\AuthDTO;
+use App\DTO\Auth\AuthDTO;
 use App\HTTPResource\HTTPResource;
-use App\HTTPResource\User\UserResource;
+use App\HTTPResource\MobileAPI\User\UserResource;
 
 class AuthResource extends HTTPResource
 {
