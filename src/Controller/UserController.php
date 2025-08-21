@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\DTO\Auth\LoginDTO;
 use App\DTO\User\UserCreateDTO;
-use App\HTTPResource\MobileAPI\Auth\AuthResource;
 use App\Request\Auth\LoginRequest;
 use App\Request\Auth\RegistrationRequest;
 use App\Service\UserService;
@@ -12,21 +11,27 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends BaseController
 {
     #[Route('/registration', name: 'registration', methods: ['POST'])]
-    public function registration(UserService $userService, RegistrationRequest $request): JsonResponse
+    public function registration(UserService $userService, RegistrationRequest $request, SerializerInterface $serializer): JsonResponse
     {
         $data = $request->getRequest()->toArray();
 
         $user = $userService->createUser(new UserCreateDTO($data['name'], $data['password']));
 
-        return $this->successResponse(new AuthResource($user));
+        $userArr = $serializer->normalize($user, null, ['groups' => ['user_detail']]);
+
+        return $this->successResponse([
+            'token' => $user->token,
+            'user' => $userArr
+        ]);
     }
 
     #[Route('/login', name: 'login', methods: ['POST'])]
-    public function login(UserService $userService, LoginRequest $request): JsonResponse
+    public function login(UserService $userService, LoginRequest $request, SerializerInterface $serializer): JsonResponse
     {
         $data = $request->getRequest()->toArray();
         try {
@@ -35,11 +40,15 @@ class UserController extends BaseController
             return $this->errorResponse($exception->getMessage(), (array)$exception->getMessage(), $exception->getStatusCode());
         }
 
-        return $this->successResponse(new AuthResource($authData));
+        $userArr = $serializer->normalize($authData->user, null, ['groups' => ['user_detail']]);
+        return $this->successResponse([
+            'token' => $authData->token,
+            'user' => $userArr
+        ]);
     }
 
     #[Route('/admin/login', name: 'admin_login', methods: ['POST'])]
-    public function adminLogin(UserService $userService, LoginRequest $request): JsonResponse
+    public function adminLogin(UserService $userService, LoginRequest $request, SerializerInterface $serializer): JsonResponse
     {
         $data = $request->getRequest()->toArray();
         try {
@@ -48,7 +57,10 @@ class UserController extends BaseController
             return $this->errorResponse($exception->getMessage(), (array)$exception->getMessage(), $exception->getStatusCode());
         }
 
-        return $this->successResponse(new AuthResource($authData));
+        $userArr = $serializer->normalize($authData->user, null, ['groups' => ['user_detail']]);
+        return $this->successResponse([
+            'token' => $authData->token,
+            'user' => $userArr
+        ]);
     }
 }
-

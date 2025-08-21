@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\HTTPResource\HTTPResource;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -10,8 +9,10 @@ abstract class BaseController extends AbstractController
 {
     public function successResponse(mixed $data = null, string $message = 'success', int $code = 200): JsonResponse
     {
-        if ($data instanceof HTTPResource) {
-            $data = $data->toArray();
+
+        // If $data is a JSON string, return it as raw JSON
+        if (is_string($data)) {
+            $data = json_decode($data, true);
         }
 
         return $this->json([

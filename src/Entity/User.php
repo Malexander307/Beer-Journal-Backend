@@ -16,6 +16,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["user_detail"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
@@ -27,9 +28,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["user_detail"])]
     private ?string $password = null;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups(["user_detail"])]
     private bool $is_admin = false;
 
     public function getId(): ?int

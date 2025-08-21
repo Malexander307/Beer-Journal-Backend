@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BeerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BeerRepository::class)]
 class Beer
@@ -11,14 +12,19 @@ class Beer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["beer_detail"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: false)]
+    #[Groups(["beer_detail"])]
     private string $name;
+
     #[ORM\Column(length: 255)]
+    #[Groups(["beer_detail"])]
     private string $imageUrl;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["beer_detail"])]
     private string $description;
 
     public function getId(): ?int
